@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   assembler.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: umoff <umoff@student.42.fr>                +#+  +:+       +#+        */
+/*   By: macbookair <macbookair@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/26 13:36:41 by umoff             #+#    #+#             */
-/*   Updated: 2020/07/02 14:01:05 by umoff            ###   ########.fr       */
+/*   Updated: 2020/07/29 12:11:45 by macbookair       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,24 @@ void	split_file_tkns(char *file_name, t_tkn_sec *check_list,
 }
 
 /*
+** Инструкция
+*/
+
+void	ft_usage_assembler(void)
+{
+	int		fd;
+	char	buf;
+
+	fd = open("txt/usage_assembler.txt", O_RDONLY);
+	if (fd == -1)
+		exit(-1);
+	while (read(fd,&buf,1))
+		write(1,&buf,1);
+	close(fd);
+	exit(-1);
+}
+
+/*
 ** Главная функция 
 */
 
@@ -84,15 +102,22 @@ int		main(int ac, char **av)
 	t_header	header;
 	t_tkn_sec	check_list;
 	int			i;
-
-	i = 0;
-	while (++i < ac)
+	
+	if (ac == 1)
 	{
-		tkn = NULL;
-		split_file_tkns(av[i], &check_list, &tkn);
-		make_headers(&header, tkn);
-		print_to_file(av[i], tkn, &header);
-		ml_free_all();
+		ft_usage_assembler();
+	}
+	else
+	{
+		i = 0;
+		while (++i < ac)
+		{
+			tkn = NULL;
+			split_file_tkns(av[i], &check_list, &tkn);
+			make_headers(&header, tkn);
+			print_to_file(av[i], tkn, &header);
+			ml_free_all();
+		}
 	}
 	return (0);
 }
